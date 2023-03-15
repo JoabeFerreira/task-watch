@@ -1,18 +1,29 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 function App() {
   const [progress, setProgress] = useState(0);
+  const [timeElapsed, setTimeElapsed] = useState(0);
   const timerRef = useRef<HTMLDivElement>(null)
-let intervalId;
+  const [isTimerRunning, setIsTimerRunning] = useState(false)
 
-  const calculateProgress = () => {
-    intervalId = window.setInterval(() => {
+  useEffect(() => {
+    if (!isTimerRunning) return
+
+    const intervalId = setInterval(() => {
       if (!timerRef.current) return;
-      const newProgress = progress + 5
-      timerRef.current.style.background = `conic-gradient(#AA77FF ${newProgress}deg, #1a1a1a 0deg)`
-      setProgress(newProgress)
+      setProgress(oldProgress => {
+        const newProgress = oldProgress + 5
+        timerRef!.current!.style.background = `conic-gradient(#AA77FF ${progressToDegrees(newProgress)}deg, #1a1a1a 0deg)`
+        return newProgress
+      })
     }, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [isTimerRunning])
+
+  const progressToDegrees = (progress: number) => {
+    return (360 * progress) / 100
   }
 
   return (
@@ -22,7 +33,11 @@ let intervalId;
           {progress}%
         </div>
       </div>
-      <button onClick={() => calculateProgress()}>Start</button>
+      <div className="time-elapsed">
+        <span>{timeElapsed}</span>
+      </div>
+      <button onClick={() => setIsTimerRunning(true)}>Start</button>
+      <button onClick={() => setIsTimerRunning(false)}>Pause</button>
     </div>
   )
 }
