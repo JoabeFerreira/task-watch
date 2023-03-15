@@ -1,9 +1,11 @@
+type Period = 'seconds' | 'minutes' | 'hours'
+
 export class Time{
     seconds = 0
     minutes = 0
     hours = 0
 
-    addSeconds(secondsToAdd: number){
+    addSeconds(secondsToAdd: number): Time{
         const secondsAdded = this.seconds + secondsToAdd
         const secondsPassed = secondsAdded - 60
         if(secondsPassed < 0){
@@ -14,12 +16,27 @@ export class Time{
         }else{
             this.seconds = 0
         }
-    }
+        return this
+    } 
 
-    addMinutes(minutesToAdd: number): void{
-
+    addMinutes(minutesToAdd: number): Time{
+      this.addPeriod(minutesToAdd, 'minutes', (value) => this.addPeriod(value, 'hours', () => {}))
+      return this
     }
     
+  private addPeriod(minutesToAdd: number, period: Period, addPeriodFunction: (periodValue: number) => void) {
+    const secondsAdded = this[period] + minutesToAdd
+    const secondsPassed = secondsAdded - 60
+    if (secondsPassed < 0) {
+      this[period] = secondsAdded
+    } else if (secondsPassed === 0) {
+      this[period] = 0
+      addPeriodFunction(1)
+    } else {
+      this[period] = 0
+    }
+  }
+
     addHours(minutesToAdd: number): void{
 
     }
@@ -29,6 +46,10 @@ export class Time{
     }
 
     display(): string {
-        return `${this.hours}:${this.minutes}:${this.seconds}`
+        return `${this.padStart(this.hours)}:${this.padStart(this.minutes)}:${this.padStart(this.seconds)}`
+    }
+
+    private padStart(period: number): string{
+      return period.toString().padStart(2, '0')
     }
 }
