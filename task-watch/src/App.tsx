@@ -4,11 +4,14 @@ import { Time } from './models/time';
 
 function App() {
   const [progress, setProgress] = useState(0);
-  const [timeElapsed, setTimeElapsed] = useState<Time>(new Time());
-  const [plannedTask, setPlannedTask] = useState<Time>(new Time());
+  const [timeElapsed, setTimeElapsed] = useState<Time>(new Time(0, 0, 0));
+  const [plannedTask, setPlannedTask] = useState<Time>(new Time(0, 0, 0));
   const timerRef = useRef<HTMLDivElement>(null)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const startedDate = useRef<Date>()
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
     if (!isTimerRunning) return
@@ -36,10 +39,16 @@ function App() {
   };
   return (
     <div className="App">
+      <>{console.log('plannedTask', plannedTask)}</>
       <div>
-        <input type="number" value={plannedTask.hours} onChange={e => setPlannedTask({...plannedTask})} />
-        <input type="number" />
-        <input type="number" />
+        {/* <input type="number" value={hours} onChange={e => setHours(+e.target.value)} max={24} min={0} />
+        <input type="number" value={minutes} onChange={e => setMinutes(+e.target.value)} max={59} min={0}/>
+        <input type="number" value={seconds} onChange={e => setSeconds(+e.target.value)} max={59} min={0}/> */}
+        <input type="number" value={plannedTask.hours} readOnly />
+        <input type="number" value={plannedTask.minutes} readOnly />
+        <button onClick={() => setSeconds(h => h + 1)}>+</button>
+        <input type="number" value={seconds} readOnly />
+        <button onClick={() => setSeconds(h => h - 1)}>-</button>
       </div>
       <div ref={timerRef} className="timer">
         <div className="progress-display">
