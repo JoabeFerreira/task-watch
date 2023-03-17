@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import NumericUpDown from './components/numeric-updown';
 import { Time } from './models/time';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
     startedDate.current = new Date()
     setIsTimerRunning(true)
   };
+
   return (
     <div className="App">
       <>{console.log('plannedTask', plannedTask)}</>
@@ -46,9 +48,7 @@ function App() {
         <input type="number" value={seconds} onChange={e => setSeconds(+e.target.value)} max={59} min={0}/> */}
         <input type="number" value={plannedTask.hours} readOnly />
         <input type="number" value={plannedTask.minutes} readOnly />
-        <button onClick={() => setSeconds(h => h + 1)}>+</button>
-        <input type="number" value={seconds} readOnly />
-        <button onClick={() => setSeconds(h => h - 1)}>-</button>
+        <NumericUpDown value={seconds} onChange={setSeconds} min={0} max={59}/>
       </div>
       <div ref={timerRef} className="timer">
         <div className="progress-display">
