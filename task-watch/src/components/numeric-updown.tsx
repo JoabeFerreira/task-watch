@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 interface NumericUpDownProps {
     value: number
@@ -9,9 +9,9 @@ interface NumericUpDownProps {
 }
 
 function NumericUpDown(props: NumericUpDownProps) {
-    // const [upBtnEnabled, setUpBtnEnabled] = useState(!props.disabled);
-    // const [downBtnEnabled, setDownBtnEnabled] = useState(!props.disabled);
-    const [tempValue, setTempValue] = useState('');
+    const [tempValue, setTempValue] = useState(props.value.toString().padStart(2, '0'));
+
+    useEffect(() => setTempValue(props.value.toString().padStart(2, '0')), [props.value])
 
     const handleUpClick = (): void => {
         let newValue = props.value + 1
@@ -31,7 +31,7 @@ function NumericUpDown(props: NumericUpDownProps) {
 
     return <div className="numeric-updown">
         <button onClick={() => handleUpClick()}>+</button>
-        <input value={props.value} onChange={e => setTempValue(e.target.value)} onBlur={() => enforceMinMax(tempValue)} />
+        <input type='text' value={tempValue} onChange={e => setTempValue(e.target.value)} placeholder={'00'} onBlur={() => enforceMinMax(tempValue)} />
         <button onClick={() => handleDownClick()}>-</button>
     </div>;
 

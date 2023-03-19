@@ -1,30 +1,26 @@
+import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import NumericUpDown from './components/numeric-updown';
 import { Time } from './models/time';
 
 function App() {
-  const [progress, setProgress] = useState(0);
   const [timeElapsed, setTimeElapsed] = useState<Time>(new Time(0, 0, 0));
   const [plannedTask, setPlannedTask] = useState<Time>(new Time(0, 0, 0));
   const timerRef = useRef<HTMLDivElement>(null)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
-  const startedDate = useRef<Date>()
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [showTimerSettings, setShowTimerSettings] = useState(false);
 
   useEffect(() => {
     if (!isTimerRunning) return
 
     const intervalId = setInterval(() => {
       if (!timerRef.current) return;
-      setProgress(oldProgress => {
-        const newProgress = oldProgress + 5
-        timerRef!.current!.style.background = `conic-gradient(#AA77FF ${progressToDegrees(newProgress)}deg, #1a1a1a 0deg)`
-        return newProgress
-      })
-      setTimeElapsed(timeElapsed.addSeconds(1))
+      const elapsed = timeElapsed.addSeconds(1)
+      setTimeElapsed(elapsed)
+      const progress = calculateProgress(elapsed)
+      timerRef!.current!.style.background = `conic-gradient(#AA77FF ${progressToDegrees(progress)}deg, #1a1a1a 0deg)`
     }, 1000)
 
     return () => clearInterval(intervalId)
@@ -34,32 +30,38 @@ function App() {
     return (360 * progress) / 100
   }
 
+  function calculateProgress(elapsed: Time) {
+    return ((timeElapsed.getTotalSeconds() * 100) / plannedTask.getTotalSeconds())
+  }
+
   const startTimer = () => {
-    startedDate.current = new Date()
+    if (plannedTask.isBlank()) {
+      setShowTimerSettings(true)
+      return
+    }
+    setShowTimerSettings(false)
     setIsTimerRunning(true)
   };
 
   return (
     <div className="App">
-      <>{console.log('plannedTask', plannedTask)}</>
-      <div>
-        {/* <input type="number" value={hours} onChange={e => setHours(+e.target.value)} max={24} min={0} />
-        <input type="number" value={minutes} onChange={e => setMinutes(+e.target.value)} max={59} min={0}/>
-        <input type="number" value={seconds} onChange={e => setSeconds(+e.target.value)} max={59} min={0}/> */}
-        <input type="number" value={plannedTask.hours} readOnly />
-        <input type="number" value={plannedTask.minutes} readOnly />
-        <NumericUpDown value={seconds} onChange={setSeconds} min={0} max={59}/>
-      </div>
+      {showTimerSettings && <div className='timer-setting hidden'>
+        <NumericUpDown value={plannedTask.hours} onChange={hours => setPlannedTask(plannedTask.setHours(hours))} min={0} max={23} />
+        <NumericUpDown value={plannedTask.minutes} onChange={minutes => setPlannedTask(plannedTask.setMinutes(minutes))} min={0} max={59} />
+        <NumericUpDown value={plannedTask.seconds} onChange={seconds => setPlannedTask(plannedTask.setSeconds(seconds))} min={0} max={59} />
+        <button onClick={() => startTimer()}>Starta essa budega</button>
+      </div>}
       <div ref={timerRef} className="timer">
-        <div className="progress-display">
-          {progress}%
+        <div className="timer-button">
+          {!isTimerRunning 
+          ? <FontAwesomeIcon style={{marginLeft: '0.15em'}} icon={faPlay} size={'2x'} onClick={startTimer}/>
+          : <FontAwesomeIcon icon={faPause} size={'2x'} onClick={() => setIsTimerRunning(false)}/>
+          }
         </div>
       </div>
       <div className="time-elapsed">
         <span>{timeElapsed.display()}</span>
       </div>
-      <button onClick={startTimer}>Start</button>
-      <button onClick={() => setIsTimerRunning(false)}>Pause</button>
     </div>
   )
 }

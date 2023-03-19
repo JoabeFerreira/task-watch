@@ -12,20 +12,20 @@ export class Time {
   }
 
 
-  // setSeconds(seconds: number): Time {
-  //   this.seconds = seconds
-  //   return this
-  // }
+  setSeconds(seconds: number): Time {
+    this.seconds = seconds
+    return new Time(this.hours, this.minutes, seconds)
+  }
 
-  // setMinutes(minutes: number): Time {
-  //   this.minutes = minutes
-  //   return this
-  // }
+  setMinutes(minutes: number): Time {
+    this.minutes = minutes
+    return new Time(this.hours, minutes, this.seconds)
+  }
 
-  // setHours(hours: number): Time {
-  //   this.hours = hours
-  //   return this
-  // }
+  setHours(hours: number): Time {
+    this.hours = hours
+    return new Time(hours, this.minutes, this.seconds)
+  }
 
   addSeconds(secondsToAdd: number): Time {
     const secondsAdded = this.seconds + secondsToAdd
@@ -64,11 +64,15 @@ export class Time {
   }
 
   getTotalSeconds(): number {
-    return 0
+    return (this.hours * 3600) + (this.minutes * 60) + this.seconds
   }
 
   display(): string {
     return `${this.padStart(this.hours)}:${this.padStart(this.minutes)}:${this.padStart(this.seconds)}`
+  }
+
+  isBlank(): boolean{
+    return !this.seconds && !this.minutes && !this.hours  
   }
 
   private padStart(period: number): string {

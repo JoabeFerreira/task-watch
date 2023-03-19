@@ -40,8 +40,13 @@
   transform: translate(-50%, 0);
 } */
 
-.timer .progress-display{
+.timer-button{
   position: relative;
   font-size: 2em;
   color: #AA77FF;
+  cursor: pointer;
+}
+
+.timer-button:hover{
+  color: #9265db;
 }
