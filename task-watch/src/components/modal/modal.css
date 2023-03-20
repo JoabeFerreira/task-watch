@@ -1,0 +1,37 @@
+.modal-container{
+    position: fixed;
+    top:0;
+    right:0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.modal {
+    background-color: var(--bg-color);
+    min-width: 50%;
+    max-width: 80%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em 0.75em;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 0.5em 0.75em;
+    overflow-y: auto;
+}
+
+.modal .close-btn{
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+}

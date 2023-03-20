@@ -1,4 +1,7 @@
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
+import './numeric-updown.css'
 
 interface NumericUpDownProps {
     value: number
@@ -29,12 +32,6 @@ function NumericUpDown(props: NumericUpDownProps) {
         props.onChange(newValue)
     }
 
-    return <div className="numeric-updown">
-        <button onClick={() => handleUpClick()}>+</button>
-        <input type='text' value={tempValue} onChange={e => setTempValue(e.target.value)} placeholder={'00'} onBlur={() => enforceMinMax(tempValue)} />
-        <button onClick={() => handleDownClick()}>-</button>
-    </div>;
-
     function enforceMinMax(value: string) {
         let numberValue = +value;
         if (numberValue > props.max)
@@ -43,6 +40,12 @@ function NumericUpDown(props: NumericUpDownProps) {
             numberValue = props.min
         props.onChange(numberValue)
     }
+
+    return <div className="numeric-updown">
+        <button onClick={() => handleUpClick()}><FontAwesomeIcon icon={faAngleUp} /></button>
+        <input type='text' value={tempValue} onChange={e => setTempValue(e.target.value)} placeholder={'00'} onBlur={() => enforceMinMax(tempValue)} />
+        <button onClick={() => handleDownClick()}><FontAwesomeIcon icon={faAngleDown} /></button>
+    </div>;
 }
 
 export default NumericUpDown;

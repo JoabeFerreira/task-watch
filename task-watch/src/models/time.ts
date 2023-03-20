@@ -14,17 +14,21 @@ export class Time {
 
   setSeconds(seconds: number): Time {
     this.seconds = seconds
-    return new Time(this.hours, this.minutes, seconds)
+    return this.createTime()
   }
 
   setMinutes(minutes: number): Time {
     this.minutes = minutes
-    return new Time(this.hours, minutes, this.seconds)
+    return this.createTime()
   }
 
   setHours(hours: number): Time {
     this.hours = hours
-    return new Time(hours, this.minutes, this.seconds)
+    return this.createTime()
+  }
+
+  private createTime(){
+    return new Time(this.hours, this.minutes, this.seconds)
   }
 
   addSeconds(secondsToAdd: number): Time {
@@ -38,7 +42,7 @@ export class Time {
     } else {
       this.seconds = 0
     }
-    return this
+    return this.createTime()
   }
 
   addMinutes(minutesToAdd: number): Time {

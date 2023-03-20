@@ -1,0 +1,19 @@
+.numeric-updown{
+    display: flex;
+    flex-direction: column;
+    max-width: 50px;
+}
+
+.numeric-updown button:first-of-type{
+    border-bottom-left-radius: unset;
+    border-bottom-right-radius: unset;
+}
+
+.numeric-updown button:last-of-type{
+    border-top-left-radius: unset;
+    border-top-right-radius: unset;
+}
+
+.numeric-updown button{
+    padding: 0.25em;
+}
