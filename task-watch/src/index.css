@@ -63,7 +63,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--component-bg-color-dark);
+  background-color: var(--component-bg-color);
   cursor: pointer;
   transition: border-color 0.25s;
   color: var(--component-color);
@@ -74,6 +74,15 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+input{
+  border: none;
+  text-align: center;
+  background-color: var(--component-bg-color);
+  outline: none;
+  padding: 0.5em;
+  border-radius: 4px;
 }
 
 @media (prefers-color-scheme: light) {

@@ -17,3 +17,7 @@
 .numeric-updown button{
     padding: 0.25em;
 }
+
+.numeric-updown input{
+    border-radius: 0;
+}

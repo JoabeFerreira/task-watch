@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import './task-timer.css'
 import { Time, Task } from '../../models/index';
 import { Modal, NumericUpDown } from '..';
+import Textbox from '../textbox/textbox';
 
 function TaskTimer() {
   const [timeElapsed, setTimeElapsed] = useState(new Time(0, 0, 0));
@@ -49,12 +50,19 @@ function TaskTimer() {
     <div className="task-timer">
       <Modal show={showTimerSettings} onClose={() => setShowTimerSettings(false)} title='Task Settings'>
         <div className='task-setting'>
-          <input value={currentTask.description} onChange={e => setCurrentTask({ ...currentTask, description: e.target.value })} />
-          <NumericUpDown value={currentTask.timePlanned.hours} onChange={hours => setCurrentTask({ ...currentTask, timePlanned: currentTask.timePlanned.setHours(hours) })} min={0} max={23} />
-          <span>:</span>
-          <NumericUpDown value={currentTask.timePlanned.minutes} onChange={minutes => setCurrentTask({ ...currentTask, timePlanned: currentTask.timePlanned.setMinutes(minutes) })} min={0} max={59} />
-          <span>:</span>
-          <NumericUpDown value={currentTask.timePlanned.seconds} onChange={seconds => setCurrentTask({ ...currentTask, timePlanned: currentTask.timePlanned.setSeconds(seconds) })} min={0} max={59} />
+          <div>
+            <Textbox value={currentTask.description} label={"Description"} onChange={description => setCurrentTask({ ...currentTask, description})} />
+          </div>
+          <div>
+            <NumericUpDown value={currentTask.timePlanned.hours} min={0} max={23}
+            onChange={hours => setCurrentTask({ ...currentTask, timePlanned: currentTask.timePlanned.setHours(hours) })}/>
+            <span>:</span>
+            <NumericUpDown value={currentTask.timePlanned.minutes} min={0} max={59}
+            onChange={minutes => setCurrentTask({ ...currentTask, timePlanned: currentTask.timePlanned.setMinutes(minutes) })}/>
+            <span>:</span>
+            <NumericUpDown value={currentTask.timePlanned.seconds} min={0} max={59} 
+            onChange={seconds => setCurrentTask({ ...currentTask, timePlanned: currentTask.timePlanned.setSeconds(seconds) })}/>
+          </div>
         </div>
         <button onClick={() => startTimer()}>Starta essa budega</button>
       </Modal>
@@ -71,7 +79,7 @@ function TaskTimer() {
         <h1>{timeElapsed.display()}</h1>
       </div>
       <div id='task-description'>
-        <h2>{'Criar o alerta para prazos de um projeto fcefcae vceac'}</h2>
+        <h2>{currentTask.description}</h2>
       </div>
     </div>
   )
